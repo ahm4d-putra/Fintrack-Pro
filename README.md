@@ -24,10 +24,9 @@ FinTrack Pro dibangun menggunakan vanilla JavaScript dan Supabase. Fitur utama y
 ## Instalasi
 
 ### 1. Clone Repository
-```bash
 git clone https://github.com/username/fintrack-pro.git
 cd fintrack-pro
-```
+
 
 ### 2. Konfigurasi Supabase
 - Buat project baru di [supabase.com](https://supabase.com)
