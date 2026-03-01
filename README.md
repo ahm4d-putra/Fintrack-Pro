@@ -7,19 +7,19 @@ Personal finance tracker untuk mengelola keuangan dengan lebih mudah. Proyek ini
 
 FinTrack Pro dibangun menggunakan vanilla JavaScript dan Supabase. Fitur utama yang tersedia:
 
-- **Dashboard Visual** - Menampilkan ringkasan pemasukan, pengeluaran, dan saldo dalam bentuk chart
-- **Manajemen Transaksi** - Menambah, mengedit, dan menghapus transaksi dengan kategori
-- **Filter & Pencarian** - Mencari transaksi berdasarkan tanggal, kategori, atau nama
-- **Peringatan Budget** - Notifikasi saat pengeluaran mendekati batas yang ditentukan
-- **Dark Mode** - Tampilan nyaman untuk penggunaan di malam hari
-- **Export CSV** - Mengunduh data untuk keperluan laporan atau backup
+- Dashboard Visual - Menampilkan ringkasan pemasukan, pengeluaran, dan saldo dalam bentuk chart
+- Manajemen Transaksi - Menambah, mengedit, dan menghapus transaksi dengan kategori
+- Filter & Pencarian - Mencari transaksi berdasarkan tanggal, kategori, atau nama
+- Peringatan Budget - Notifikasi saat pengeluaran mendekati batas yang ditentukan
+- Dark Mode - Tampilan nyaman untuk penggunaan di malam hari
+- Export CSV - Mengunduh data untuk keperluan laporan atau backup
 
 ## Teknologi
 
-- **Frontend**: HTML, CSS, Vanilla JavaScript
-- **Database**: Supabase (PostgreSQL)
-- **Charting**: Chart.js
-- **Icons**: Phosphor Icons
+- Frontend: HTML, CSS, Vanilla JavaScript
+- Database: Supabase (PostgreSQL)
+- Charting: Chart.js
+- Icons: Phosphor Icons
 
 ## Struktur Folder
 
