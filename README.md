@@ -21,18 +21,6 @@ FinTrack Pro dibangun menggunakan vanilla JavaScript dan Supabase. Fitur utama y
 - Charting: Chart.js
 - Icons: Phosphor Icons
 
-## Struktur Folder
-
-```
-assets/
-├── css/           # Modular CSS dengan metodologi BEM
-├── js/
-│   ├── config/    # Konfigurasi Supabase dan constants
-│   ├── modules/   # Logika bisnis aplikasi
-│   ├── components/# Komponen UI
-│   └── utils/     # Fungsi utilitas
-```
-
 ## Instalasi
 
 ### 1. Clone Repository
