@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack Pro – Smart Money Management</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="brand">
+                <div class="brand__icon">
+                    <i class="ph ph-wallet"></i>
+                </div>
+                <div class="brand__text">
+                    <h1>FinTrack Pro</h1>
+                    <p>Smart Money Management System</p>
+                </div>
+            </div>
+            <header class="header">
+    <div class="brand">
+        <a href="index.html" style="text-decoration: none; display: flex; align-items: center; gap: 12px;">
+            <div class="brand__icon">
+                <i class="ph ph-wallet"></i>
+            </div>
+            <div class="brand__text">
+                <h1>FinTrack Pro</h1>
+                <p>Smart Money Management System</p>
+            </div>
+        </a>
+    </div>
+    <!-- ... rest of header ... -->
+</header>
+            <div class="header__actions">
+                <button class="btn btn--icon btn--secondary" onclick="theme.toggle()" title="Toggle Dark Mode">
+                    <i class="ph ph-moon" id="theme-icon"></i>
+                </button>
+                <button class="btn btn--secondary" onclick="exporter.toCSV()">
+                    <i class="ph ph-download-simple"></i>
+                    <span>Export CSV</span>
+                </button>
+                <button class="btn btn--primary" onclick="modal.open()">
+                    <i class="ph ph-plus"></i>
+                    <span>Tambah Transaksi</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Budget Warning -->
+        <div class="budget-warning" id="budgetWarning">
+            <i class="ph ph-warning-circle"></i>
+            <span>Peringatan: Pengeluaran bulan ini melebihi 80% dari budget!</span>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card--balance">
+                <div class="stat-card__header">
+                    <div>
+                        <div class="stat-card__label">Total Saldo</div>
+                        <div class="stat-card__value" id="totalBalance">Rp 0</div>
+                        <div class="stat-card__change">Saldo keseluruhan</div>
+                    </div>
+                    <div class="stat-card__icon">
+                        <i class="ph ph-currency-dollar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card--income">
+                <div class="stat-card__header">
+                    <div>
+                        <div class="stat-card__label">Total Pemasukan</div>
+                        <div class="stat-card__value" id="totalIncome">Rp 0</div>
+                        <div class="stat-card__change">Bulan ini</div>
+                    </div>
+                    <div class="stat-card__icon">
+                        <i class="ph ph-trend-up"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card--expense">
+                <div class="stat-card__header">
+                    <div>
+                        <div class="stat-card__label">Total Pengeluaran</div>
+                        <div class="stat-card__value" id="totalExpense">Rp 0</div>
+                        <div class="stat-card__change">Bulan ini</div>
+                    </div>
+                    <div class="stat-card__icon">
+                        <i class="ph ph-trend-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div class="main-content">
+                <!-- Transactions Card -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">Daftar Transaksi</h2>
+                        <span class="card__meta" id="transactionCount">0 transaksi</span>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <i class="ph ph-magnifying-glass"></i>
+                            <input type="text" class="form-input" id="searchInput" placeholder="Cari transaksi..." oninput="filter.apply()">
+                        </div>
+                        <select class="form-select" id="filterType" onchange="filter.apply()">
+                            <option value="">Semua Tipe</option>
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                        <select class="form-select" id="filterCategory" onchange="filter.apply()">
+                            <option value="">Semua Kategori</option>
+                            <option value="Makanan">Makanan</option>
+                            <option value="Transportasi">Transportasi</option>
+                            <option value="Hiburan">Hiburan</option>
+                            <option value="Tagihan">Tagihan</option>
+                            <option value="Belanja">Belanja</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="date" class="form-input" id="filterDate" onchange="filter.apply()">
+                    </div>
+
+                    <!-- Transaction List -->
+                    <div id="transactionList" class="transaction-list">
+                        <div class="empty-state">
+                            <i class="ph ph-receipt"></i>
+                            <h3>Belum ada transaksi</h3>
+                            <p>Mulai catat keuanganmu dengan menekan tombol "Tambah Transaksi"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="chart-grid">
+                    <div class="card">
+                        <h3 class="card__title">Distribusi Pengeluaran</h3>
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card__title">Trend Bulanan</h3>
+                        <div class="chart-container">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="sidebar">
+                <!-- Quick Add Form -->
+                <div class="card">
+                    <div class="card__header">
+                        <h2 class="card__title">Tambah Transaksi</h2>
+                    </div>
+                    <form id="transactionForm" onsubmit="transaction.add(event)">
+                        <input type="hidden" id="editId">
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tipe Transaksi</label>
+                            <div class="radio-group">
+                                <label class="radio-label radio-label--income" onclick="ui.selectType('income')">
+                                    <input type="radio" name="type" value="income" id="typeIncome">
+                                    <i class="ph ph-arrow-down-left"></i> Pemasukan
+                                </label>
+                                <label class="radio-label radio-label--expense active" onclick="ui.selectType('expense')">
+                                    <input type="radio" name="type" value="expense" id="typeExpense" checked>
+                                    <i class="ph ph-arrow-up-right"></i> Pengeluaran
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="name">Nama Transaksi</label>
+                            <input type="text" class="form-input" id="name" placeholder="Contoh: Gaji Bulanan" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="amount">Jumlah (Rp)</label>
+                                <input type="number" class="form-input" id="amount" placeholder="100000" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="date">Tanggal</label>
+                                <input type="date" class="form-input" id="date" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="category">Kategori</label>
+                            <select class="form-select" id="category" required>
+                                <option value="">Pilih Kategori</option>
+                                <option value="Makanan">🍔 Makanan</option>
+                                <option value="Transportasi">🚗 Transportasi</option>
+                                <option value="Hiburan">🎬 Hiburan</option>
+                                <option value="Tagihan">💡 Tagihan</option>
+                                <option value="Belanja">🛍️ Belanja</option>
+                                <option value="Gaji">💰 Gaji</option>
+                                <option value="Investasi">📈 Investasi</option>
+                                <option value="Lainnya">📦 Lainnya</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--block">
+                            <i class="ph ph-check-circle"></i>
+                            <span id="submitText">Simpan Transaksi</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Budget Settings -->
+                <div class="card card--mt">
+                    <div class="card__header">
+                        <h2 class="card__title">Pengaturan Budget</h2>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Budget Bulanan (Rp)</label>
+                        <input type="number" class="form-input" id="budgetLimit" placeholder="5000000" onchange="budget.save()">
+                        <small class="form-hint">Sistem akan memberi peringatan jika pengeluaran > 80% budget</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="ph ph-check-circle"></i>
+        <span id="toastMessage">Operasi berhasil!</span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" onclick="modal.closeOnOverlay(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal__header">
+                <h2 class="modal__title">Edit Transaksi</h2>
+                <button class="modal__close" onclick="modal.close()">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            <div class="modal__body">
+                <form id="modalForm" onsubmit="transaction.update(event)">
+                    <input type="hidden" id="modalEditId">
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tipe Transaksi</label>
+                        <div class="radio-group">
+                            <label class="radio-label" id="modalLabelIncome" onclick="ui.selectModalType('income')">
+                                <input type="radio" name="modalType" value="income" id="modalTypeIncome">
+                                Pemasukan
+                            </label>
+                            <label class="radio-label" id="modalLabelExpense" onclick="ui.selectModalType('expense')">
+                                <input type="radio" name="modalType" value="expense" id="modalTypeExpense">
+                                Pengeluaran
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Nama Transaksi</label>
+                        <input type="text" class="form-input" id="modalName" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Jumlah (Rp)</label>
+                            <input type="number" class="form-input" id="modalAmount" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal</label>
+                            <input type="date" class="form-input" id="modalDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Kategori</label>
+                        <select class="form-select" id="modalCategory" required>
+                            <option value="Makanan">Makanan</option>
+                            <option value="Transportasi">Transportasi</option>
+                            <option value="Hiburan">Hiburan</option>
+                            <option value="Tagihan">Tagihan</option>
+                            <option value="Belanja">Belanja</option>
+                            <option value="Gaji">Gaji</option>
+                            <option value="Investasi">Investasi</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn--secondary" onclick="modal.close()">Batal</button>
+                        <button type="submit" class="btn btn--primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- SCRIPTS - URUTAN PENTING!                                  -->
+    <!-- ========================================================== -->
+    
+    <!-- 1. Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Config -->
+    <script src="assets/js/config/supabase.js"></script>
+    <script src="assets/js/config/constants.js"></script>
+    <script src="assets/js/config/chartConfig.js"></script>
+    
+    <!-- 3. Utils -->
+    <script src="assets/js/utils/formatters.js"></script>
+    <script src="assets/js/utils/validators.js"></script>
+    <script src="assets/js/utils/helpers.js"></script>
+    
+    <!-- 4. Main (define app & ui) -->
+    <script src="assets/js/main.js"></script>
+    
+    <!-- 5. Modules -->
+    <script src="assets/js/modules/storage.js"></script>
+    <script src="assets/js/modules/calculator.js"></script>
+    <script src="assets/js/modules/filters.js"></script>
+    <script src="assets/js/modules/charts.js"></script>
+    <script src="assets/js/modules/budget.js"></script>
+    <script src="assets/js/modules/theme.js"></script>
+    <script src="assets/js/modules/export.js"></script>
+    <script src="assets/js/modules/transactions.js"></script>
+    
+    <!-- 6. Components -->
+    <script src="assets/js/components/toast.js"></script>
+    <script src="assets/js/components/modal.js"></script>
+    <script src="assets/js/components/renderStats.js"></script>
+    <script src="assets/js/components/renderList.js"></script>
+</body>
+</html>

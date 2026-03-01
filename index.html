@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack Pro - Smart Money Management</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav__brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .nav__icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .nav__title {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav__links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+        
+        .nav__link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav__link:hover {
+            color: var(--text);
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        
+        .btn--primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .btn--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn--ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--text-muted);
+        }
+        
+        .btn--ghost:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 48px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero__content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 1;
+        }
+        
+        .hero__badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 24px;
+        }
+        
+        .hero__title {
+            font-size: 64px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+        
+        .hero__title span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero__subtitle {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .hero__cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+        
+        .hero__stats {
+            display: flex;
+            gap: 48px;
+            justify-content: center;
+        }
+        
+        .hero__stat {
+            text-align: center;
+        }
+        
+        .hero__stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .hero__stat-label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 48px;
+            background: var(--surface);
+        }
+        
+        .features__header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+        
+        .features__title {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .features__subtitle {
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+        
+        .features__grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: var(--bg);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+        
+        .feature-card__icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card__title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .feature-card__desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 100px 48px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta__box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            border-radius: 24px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        
+        .cta__title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        
+        .cta__subtitle {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 18px;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 48px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 16px 24px;
+            }
+            
+            .nav__links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 100px 24px 60px;
+            }
+            
+            .hero__title {
+                font-size: 40px;
+            }
+            
+            .hero__stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            .features {
+                padding: 60px 24px;
+            }
+            
+            .cta {
+                padding: 60px 24px;
+            }
+            
+            .cta__box {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#" class="nav__brand">
+            <div class="nav__icon">
+                <i class="ph ph-wallet"></i>
+            </div>
+            <span class="nav__title">FinTrack Pro</span>
+        </a>
+        <div class="nav__links">
+            <a href="#features" class="nav__link">Fitur</a>
+            <a href="#" class="nav__link" onclick="alert('Coming soon!')">Harga</a>
+            <a href="#" class="nav__link" onclick="alert('Coming soon!')">Tentang</a>
+            <a href="app.html" class="btn btn--primary">
+                Mulai Gratis <i class="ph ph-arrow-right"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero__bg"></div>
+        <div class="hero__content">
+            <div class="hero__badge">
+                <i class="ph ph-sparkle"></i> Gratis Selamanya
+            </div>
+            <h1 class="hero__title">
+                Kelola Keuanganmu dengan <span>Cerdas</span>
+            </h1>
+            <p class="hero__subtitle">
+                FinTrack Pro membantu kamu melacak pemasukan & pengeluaran, 
+                mengatur budget, dan mencapai tujuan finansial lebih cepat.
+            </p>
+            <div class="hero__cta">
+                <a href="app.html" class="btn btn--primary" style="padding: 16px 32px; font-size: 17px;">
+                    <i class="ph ph-rocket-launch"></i>
+                    Mulai Sekarang
+                </a>
+                <a href="#features" class="btn btn--ghost" style="padding: 16px 32px; font-size: 17px;">
+                    Pelajari Fitur
+                </a>
+            </div>
+            <div class="hero__stats">
+                <div class="hero__stat">
+                    <div class="hero__stat-value">10K+</div>
+                    <div class="hero__stat-label">Pengguna Aktif</div>
+                </div>
+                <div class="hero__stat">
+                    <div class="hero__stat-value">Rp 50M+</div>
+                    <div class="hero__stat-label">Uang Terkelola</div>
+                </div>
+                <div class="hero__stat">
+                    <div class="hero__stat-value">4.9</div>
+                    <div class="hero__stat-label">Rating Pengguna</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features__header">
+            <h2 class="features__title">Fitur Lengkap, Gratis!</h2>
+            <p class="features__subtitle">
+                Semua yang kamu butuhkan untuk mengelola keuangan pribadi dalam satu aplikasi.
+            </p>
+        </div>
+        <div class="features__grid">
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-chart-pie-slice"></i>
+                </div>
+                <h3 class="feature-card__title">Dashboard Visual</h3>
+                <p class="feature-card__desc">
+                    Lihat ringkasan keuanganmu dengan chart interaktif dan statistik real-time.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-receipt"></i>
+                </div>
+                <h3 class="feature-card__title">Pencatatan Mudah</h3>
+                <p class="feature-card__desc">
+                    Tambah transaksi cuma dalam 3 klik. Support kategori custom dan filter lengkap.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-warning-circle"></i>
+                </div>
+                <h3 class="feature-card__title">Budget Alert</h3>
+                <p class="feature-card__desc">
+                    Dapatkan notifikasi saat pengeluaran mendekati batas budget yang kamu tentukan.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-moon-stars"></i>
+                </div>
+                <h3 class="feature-card__title">Dark Mode</h3>
+                <p class="feature-card__desc">
+                    Nyaman digunakan siang atau malam dengan tampilan modern dan eye-friendly.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-device-mobile"></i>
+                </div>
+                <h3 class="feature-card__title">Responsive Design</h3>
+                <p class="feature-card__desc">
+                    Akses dari laptop, tablet, atau smartphone. Data tersimpan di cloud.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card__icon">
+                    <i class="ph ph-download-simple"></i>
+                </div>
+                <h3 class="feature-card__title">Export Data</h3>
+                <p class="feature-card__desc">
+                    Download laporan keuangan dalam format CSV untuk keperluan akuntansi.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta__box">
+            <h2 class="cta__title">Siap Mengelola Keuangan Lebih Baik?</h2>
+            <p class="cta__subtitle">
+                Bergabung dengan 10,000+ pengguna yang sudah mengontrol keuangan mereka.
+            </p>
+            <a href="app.html" class="btn btn--primary" style="padding: 16px 40px; font-size: 18px;">
+                <i class="ph ph-rocket-launch"></i>
+                Buka Aplikasi Sekarang
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 FinTrack Pro. Built with 🔥 for better finance.</p>
+    </footer>
+</body>
+</html>
