@@ -32,7 +32,7 @@ cd fintrack-pro
 - Buat project baru di [supabase.com](https://supabase.com)
 - Jalankan SQL berikut di SQL Editor:
 
-```sql
+### SQL SCRIPT
 create table transactions (
   id bigint generated always as identity primary key,
   user_id uuid default '00000000-0000-0000-0000-000000000001',
